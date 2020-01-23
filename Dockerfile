@@ -1,8 +1,12 @@
-FROM golang:1.13.5-alpine3.10
+FROM golang
+
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
 
 COPY . .
-RUN go env -w GO111MODULE=on
-RUN go get github.com/kataras/iris/v12@latest
+
+RUN go build -o api .
 
 EXPOSE 80
-ENTRYPOINT go run api.go
+ENTRYPOINT ["./api"]
